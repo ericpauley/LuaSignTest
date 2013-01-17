@@ -1,0 +1,38 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project name="CommandSigns" default="build">
+	<description>
+            A Bukkit Plugin which allows commands to be bound to blocks
+    </description>
+
+	<!-- set global properties for this build -->
+	<property name="src" location="src" />
+	<property name="bin" location="bin" />
+	<property name="lib" location="lib" />
+	<target name="init" depends="clean" description="create necessary folders">
+		<mkdir dir="${bin}" />
+	</target>
+	<target name="build" depends="init" description="compile the source">
+		<javac srcdir="${src}" destdir="${bin}" debug="on" debuglevel="lines,vars,source" includeantruntime="false" encoding="Cp1252">
+			<classpath>
+				<pathelement path="${lib}" />
+				<pathelement location="${lib}/bukkit.jar" />
+				<pathelement location="${lib}/commons-io.jar" />
+				<fileset dir="lib" includes="kahlua*.jar"/>
+			</classpath>
+		</javac>
+		<antcall target="dist" />
+	</target>
+	<target name="dist" description="generate the distribution">
+		<jar jarfile="${bin}/LuaSignTest.jar" basedir="${bin}" encoding="Cp1252">
+			<zipfileset dir="." includes="*.yml" />
+			<zipfileset dir="." includes="*.lbc" />
+			<zipfileset dir="." includes="LICENSE.txt" />
+			<zipgroupfileset dir="${lib}" includes="commons-io.jar" />
+			<zipgroupfileset dir="${lib}" includes="kahlua*" />
+		</jar>
+	</target>
+	<target name="clean" description="clean up">
+		<delete dir="${bin}" />
+	</target>
+
+</project>
